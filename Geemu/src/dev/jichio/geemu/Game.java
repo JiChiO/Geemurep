@@ -1,9 +1,12 @@
 package dev.jichio.geemu;
 
 import dev.jichio.geemu.display.Display;
+import dev.jichio.geemu.gfx.ImageLoader;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 
 public class Game implements Runnable {
@@ -18,6 +21,8 @@ public class Game implements Runnable {
     private BufferStrategy bs;
     private Graphics g;
 
+    private BufferedImage testImage;
+
     public Game(String title, int width, int height){
         this.width = width;
         this.height = height;
@@ -28,6 +33,7 @@ public class Game implements Runnable {
 
     private void init(){
         display = new Display(title, width, height);
+        testImage = ImageLoader.loadImage("/textures/test.jpg");
     }
 
     private void tick(){
@@ -46,11 +52,7 @@ public class Game implements Runnable {
         g.clearRect(0,0, width, height);
         //Начали рисовать
 
-        g.setColor(Color.CYAN);
-        g.fillRect(10, 50, 50,70);
-        g.setColor(Color.BLUE);
-        g.fillRect(0, 0, 40, 100);
-        g.clearRect(0,0, 20, 20);
+        g.drawImage(testImage,250,250,null);
 
         //Закончили
         bs.show();
