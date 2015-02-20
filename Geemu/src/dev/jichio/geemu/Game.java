@@ -2,7 +2,7 @@ package dev.jichio.geemu;
 
 import dev.jichio.geemu.display.Display;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 
 
@@ -41,9 +41,16 @@ public class Game implements Runnable {
             return;
         }
         g = bs.getDrawGraphics();
+
+        //Это очистит экран
+        g.clearRect(0,0, width, height);
         //Начали рисовать
 
-        g.fillRect(0, 0, width, height);
+        g.setColor(Color.CYAN);
+        g.fillRect(10, 50, 50,70);
+        g.setColor(Color.BLUE);
+        g.fillRect(0, 0, 40, 100);
+        g.clearRect(0,0, 20, 20);
 
         //Закончили
         bs.show();
