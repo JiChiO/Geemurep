@@ -2,6 +2,7 @@ package dev.jichio.geemu;
 
 import dev.jichio.geemu.display.Display;
 import dev.jichio.geemu.gfx.ImageLoader;
+import dev.jichio.geemu.gfx.SpriteSheet;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -22,6 +23,7 @@ public class Game implements Runnable {
     private Graphics g;
 
     private BufferedImage testImage;
+    private SpriteSheet sheet;
 
     public Game(String title, int width, int height){
         this.width = width;
@@ -33,7 +35,8 @@ public class Game implements Runnable {
 
     private void init(){
         display = new Display(title, width, height);
-        testImage = ImageLoader.loadImage("/textures/test.jpg");
+        testImage = ImageLoader.loadImage("/textures/test.png");
+        sheet = new SpriteSheet(testImage);
     }
 
     private void tick(){
@@ -52,7 +55,7 @@ public class Game implements Runnable {
         g.clearRect(0,0, width, height);
         //Начали рисовать
 
-        g.drawImage(testImage,250,250,null);
+        g.drawImage(sheet.crop(0, 0, 144, 144), 5, 5, null);
 
         //Закончили
         bs.show();
