@@ -1,6 +1,7 @@
 package dev.jichio.geemu;
 
 import dev.jichio.geemu.display.Display;
+import dev.jichio.geemu.gfx.Assets;
 import dev.jichio.geemu.gfx.ImageLoader;
 import dev.jichio.geemu.gfx.SpriteSheet;
 
@@ -22,9 +23,6 @@ public class Game implements Runnable {
     private BufferStrategy bs;
     private Graphics g;
 
-    private BufferedImage testImage;
-    private SpriteSheet sheet;
-
     public Game(String title, int width, int height){
         this.width = width;
         this.height = height;
@@ -35,14 +33,12 @@ public class Game implements Runnable {
 
     private void init(){
         display = new Display(title, width, height);
-        testImage = ImageLoader.loadImage("/textures/test.png");
-        sheet = new SpriteSheet(testImage);
+        Assets.init();
+
     }
 
-    int x = 0;
-
     private void tick(){
-        x += 1;
+
     }
 
     private void render(){
@@ -53,13 +49,10 @@ public class Game implements Runnable {
         }
         g = bs.getDrawGraphics();
 
-        //Это очистит экран
-        g.clearRect(0,0, width, height);
+        g.clearRect(0,0, width, height); //Это очистит экран
         //Начали рисовать
 
-
-        g.drawImage(sheet.crop(0, 0, 144, 144), x, 10, null);
-
+        g.drawImage(Assets.player, 10, 10, null);
 
         //Закончили
         bs.show();
@@ -70,31 +63,10 @@ public class Game implements Runnable {
 
         init();
 
-        int fps = 60;
-        double timePerTick = 1000000000 / fps;
-        double delta = 0;
-        long now;
-        long lastTime = System.nanoTime();
-        long timer = 0;
-        int ticks = 0;
-
         while (running){
-            now = System.nanoTime();
-            delta += (now - lastTime) / timePerTick;
-            timer += now - lastTime;
-            lastTime = now;
+            tick();
+            render();
 
-            if (delta >= 1) {
-                tick();
-                render();
-                ticks++;
-                delta--;
-            }
-            if (timer >= 1000000000){
-                System.out.println("Tick and Frames: " + ticks);
-                ticks = 0;
-                timer = 0;
-            }
         }
 
         stop();
