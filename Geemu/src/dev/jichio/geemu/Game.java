@@ -39,8 +39,10 @@ public class Game implements Runnable {
         sheet = new SpriteSheet(testImage);
     }
 
-    private void tick(){
+    int x = 0;
 
+    private void tick(){
+        x += 1;
     }
 
     private void render(){
@@ -55,7 +57,9 @@ public class Game implements Runnable {
         g.clearRect(0,0, width, height);
         //Начали рисовать
 
-        g.drawImage(sheet.crop(0, 0, 144, 144), 5, 5, null);
+
+        g.drawImage(sheet.crop(0, 0, 144, 144), x, 10, null);
+
 
         //Закончили
         bs.show();
@@ -66,10 +70,31 @@ public class Game implements Runnable {
 
         init();
 
-        while (running){
-            tick();
-            render();
+        int fps = 60;
+        double timePerTick = 1000000000 / fps;
+        double delta = 0;
+        long now;
+        long lastTime = System.nanoTime();
+        long timer = 0;
+        int ticks = 0;
 
+        while (running){
+            now = System.nanoTime();
+            delta += (now - lastTime) / timePerTick;
+            timer += now - lastTime;
+            lastTime = now;
+
+            if (delta >= 1) {
+                tick();
+                render();
+                ticks++;
+                delta--;
+            }
+            if (timer >= 1000000000){
+                System.out.println("Tick and Frames: " + ticks);
+                ticks = 0;
+                timer = 0;
+            }
         }
 
         stop();
